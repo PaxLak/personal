@@ -21,13 +21,16 @@ else:
 
 #time prediction
 try:
-    txtlog = open("log.txt", 'a')
-        # Get the last 10 numbers from the file
+    txtlog = open("log.txt", 'a+')
+    txtlog.seek(0)
     last_ten_numbers = [float(line) for line in txtlog.readlines()[-10:]]
 
         # Calculate and return the average of the last 10 numbers
-    avg_aps = sum(last_ten_numbers) / len(last_ten_numbers)
-    print(f"Estimated max time: {(len(chars)^len(correct_password))/avg_aps}s")
+    if last_ten_numbers:
+        avg_aps = sum(last_ten_numbers) / len(last_ten_numbers)
+        print(f"Estimated max time: {((len(chars)**len(correct_password))/avg_aps):.2f}s")
+    else:
+        print("No previous log entries found. Cannot estimate max time.")
 
 except:
     print("Error estimating time")
