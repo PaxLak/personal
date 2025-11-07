@@ -19,12 +19,24 @@ if input("Generate random password? [Y/n]: ").strip().lower() != "n":
 else:
     correct_password = input("Enter password: ").strip()
 
-input("Enter to continue\n")  #pause
-system('cls' if name == 'nt' else 'clear')
+#time prediction
+try:
+    txtlog = open("log.txt", 'a')
+        # Get the last 10 numbers from the file
+    last_ten_numbers = [float(line) for line in txtlog.readlines()[-10:]]
 
-print(f"Password is: \033[1;32m{correct_password}\033[0m")    #print correct password
+        # Calculate and return the average of the last 10 numbers
+    avg_aps = sum(last_ten_numbers) / len(last_ten_numbers)
+    print(f"Estimated max time: {(len(chars)^len(correct_password))/avg_aps}s")
+
+except:
+    print("Error estimating time")
+
+input("Enter to continue\n")  #pause
 
 #main loop setup
+system('cls' if name == 'nt' else 'clear')
+print(f"Password is: \033[1;32m{correct_password}\033[0m")    #print correct password
 found = False
 i = 0
 start_time = time.time()
@@ -39,9 +51,11 @@ while not found:
     if attempt == correct_password:
         found = True
         elapsed_time = time.time() - start_time
+        aps = i/elapsed_time
+        txtlog.write(f"{aps}\n")
         print(f"\n\ntime taken: \033[1;32m{elapsed_time:.2f}s\033[0m")
         print(f"total attempts: \033[1;32m{i}\033[0m")
-        print(f"Average attempts per second: \033[1;32m{i/elapsed_time:.2f}\033[0m")
+        print(f"Average attempts per second: \033[1;32m{aps:.2f}\033[0m")
 
     i += 1
 
